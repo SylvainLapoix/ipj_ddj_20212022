@@ -1,0 +1,225 @@
+---
+title: "IPJ - Datajournalisme"
+subtitle: "Cours 1 : R, votre nouvel outil"
+author: "Sylvain Lapoix"
+date: "22/09/2021"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+
+
+
+---
+
+
+background-image: url(https://media.giphy.com/media/fgLKQtTw54Hk8bRaXD/giphy.gif?cid=ecf05e479ouhmm8v3czlt64x4ux9ptpwg52i9hb80skq8w1e&rid=giphy.gif&ct=g)
+class: inverse, center, top
+
+
+# Qui êtes-vous ?
+
+
+---
+
+background-image: url(https://media.giphy.com/media/26gYERtrrzIEg6oKI/giphy.gif?cid=ecf05e47krqwfy8rpnyt36r42ujfb53dz787g1dc7uiytqx9&rid=giphy.gif&ct=g)
+class: inverse, center, top
+
+
+# Qu'est-ce que vous faîtes là ?
+
+---
+
+background-image: url(https://media.giphy.com/media/d1E1kn94NNfrlPGw/source.gif)
+class: inverse, center, top
+
+
+# Qu'est-ce que c'est que ce cours ?
+
+---
+
+background-image: url(https://media.giphy.com/media/C7olQswvzSwAE/giphy.gif?cid=ecf05e47luv2ef9pemwauxcrlwb6wbcrwyefgpedcosv95pp&rid=giphy.gif&ct=g)
+class: inverse, center, top
+
+
+# MAIS QUI SUIS-JE ?
+
+
+---
+
+background-image: url("https://media.giphy.com/media/xT1R9ScK8XbiRQv70Y/giphy.gif")
+class: center, top, inverse
+
+# 1. Déroulement du cours
+
+---
+
+## Objectifs
+
+**Ce cours a pour vocation de vous initier à l'usage journalistique d'outils de programmation statistique (en l'occurence R).**
+
+Il couvrira sous un angle programmatique tous les aspects de la démarche journalistique :
+1. la recherche de source ;
+2. le traitement des informations ;
+3. leur mise en forme.
+
+Nous utiliserons donc de l'informatique, de la statistique, de l'épistémologie, de la bibliographie ...
+
+--
+
+### Mais pour faire du **journalisme**.
+
+La donnée est un moyen et non une fin.
+
+
+
+
+
+---
+
+## Trousse à outil
+
+1. [R (base)](https://www.r-project.org/) : notre langage de référence ;
+2. [Rstudio](https://rstudio.com/) : notre interface de base ;
+3. [Sublime Text 3](https://www.sublimetext.com/) : notre éditeur de texte de référence et outil à tout faire.
+
+--
+
+Ces outils nécessitent l'usage courant de plusieurs langages ou syntaxes :
+* **R**, langage de programmation statistique orienté objet ;
+* **Markdown**, syntaxe de mise en forme de texte ;
+* les **regex** (ou *expression régulière*), langage formel de description des chaînes de charactère ;
+* **Xpath**, langage de requêtes utilisé pour traiter les formats HTML et XML.
+
+Chacun de ces outils sera présenté, documenté et utilisé de manière concrète pendant le cours. La théorie sera réduite au strict minimum nécessaire, nous sommes dans un cours pratique.
+
+---
+
+## Grands principes
+
+**Je vous encourage à vous tourner vers des solutions programmatiques et open source** pour le maximum de vos usages : la dépendance aux outils propriétaires (qu'ils soient payant ou gratuit) peut constituer une faiblesse voire un danger pour les journalistes (cf. [Google Fusion Tables](https://www.fastcompany.com/90279779/rip-fusion-tables-google-is-killing-off-the-beloved-data-visualization-tool) et autres plantages).
+
+Ce cours est la deuxième itération d'une tentative d'initier des apprenti·es journalistes à la programmation, il se construira avec vous : vos retours, vos suggestions, vos trouvailles, vos critiques ...
+
+--
+
+... donc, **posez des questions, le maximum, dès que vous en ressentez le besoin : vous ferez avancer tout le monde, moi y compris**.
+
+Des pertes de temps considérables sont évitées chaque jour par l'application de bonnes habitudes :
+* **documentez** vos idées, vos réussites, vos erreurs, vos blocages ...
+* **interrogez** vos collègues, vos outils, la communauté ...
+* **partagez** vos trouvailles, vos bonnes pratiques et votre code.
+
+---
+
+
+.center[
+## Pourquoi programmer ?
+]
+
+--
+
+.center[
+## Mais oui, après tout, pourquoi ?
+]
+
+
+--
+
+
+.center[
+# POURQUOI ?????????
+]
+
+--
+
+.footnote[Calmez-vous, vous me faîtes peur.]
+
+---
+
+## Programmer en tant que journaliste 1/2
+
+Maîtriser un ou plusieurs langage de programmation, même à un niveau peu avancé, présente de nombreux avantages pour un·e journaliste :
+
+**1. accès aux sources**
+Le traitement programmatique donne accès à des sources autrement inaccessibles : APIs, registres massifs, bases de données, scraping ...
+
+**2. capacité de traitement**
+Les outils en interface graphique (ou *GUI*) ont des limites fortes en volume et complexité de traitement que la programmation permet de lever.
+
+**3. production de formats originaux**
+La programmation ouvre une large palette de formats inacessibles autrement : graphs, interactivité, expérience personnalisée, temps réel, etc.
+
+**4. compréhension technique**
+La manipulation même de l'outil informatique constitue une porte d'entrée dans la réalité technique d'une des composantes centrales de notre société (et donc de sujets qui la traversent).
+
+**5. reproductibilité**
+Là où les outils en *GUI* nécessitent de reprendre à zéro toute manipulation de données, la programmation permet de reproduire, affiner et perfectionner ses travaux.
+
+
+---
+
+## Programmer en tant que journaliste 2/2
+
+**6. communication avec d'autres métiers**
+Les langages et logiques de programmation constituent la base de la pratique de nombreux métiers, que ce soit dans l'informatique, la recherche ou l'industrie. Partager cette syntaxe facilite la communication et l'échange d'information ou de bonnes pratiques : une bonne occasion de s'inspirer de ces métiers pour mieux faire le vôtre.
+
+**7. rigueur et logique**
+Les logiques sous-jacentes à l'informatique reposent sur un rapport à l'information très différent de celui habituellement mobilisé dans le journalisme. Au déclaratif, contextuel et émotionnel, l'informatique substitue des systèmes de classification catégorielle, une nécessité de structuration de la pensée qui complète ce mode.
+
+--
+
+En un mot, et selon mon humble avis, l'informatique peut faire de vous de meilleur·es journalistes.
+
+---
+
+background-image: url(https://media.giphy.com/media/1fkd6ZTBsxSosV4UTS/giphy.gif?cid=ecf05e47rwyr9u9nsigma4n281thgxv9hr34dkxgcd8pi26n&rid=giphy.gif&ct=g)
+class: inverse, center, top
+
+
+# Dîtes adieu aux boutons !
+
+---
+
+background-image: url("https://media.giphy.com/media/l4JyOCNEfXvVYEqB2/giphy.gif")
+class: center, top, inverse
+
+# 2. R, la base
+
+---
+
+## Pourquoi R ?
+
+R est un langage de programmation puissant, versatile et en perpétuelle amélioration conçu par et pour des usager·ères quotidien·nes de la donnée.
+
+Il bénéficie de plusieurs atouts clefs qui le rendent extrêmement pratique :
+* **une documentation détaillée et facile à trouver** ;
+* un large spectre **d'extension et de packages adaptés à tous les besoins** (cette présentation est, par exemple, intégralement réalisée en R) ;
+* **une forte interopérabilité avec nombres d'autres technologies et outils** (APIs, autres langages comme C, SQL, Javascript ou Python, etc.) ;
+* **une communauté étendue et accueillante** ;
+* et, cerise sur le gâteau, c'est **open source**.
+
+---
+
+background-image: url(https://media.giphy.com/media/Ae7SI3LoPYj8Q/giphy.gif)
+class: center, top
+## Avec R, vous ne serez jamais seul·e !
+
+---
+
+background-image: url(./img/google_colab_copyindrive.png)
+class: inverse, bottom
+background-size: contain
+
+## Copiez le Google Colab dans votre Drive et allons-y
+
+---
+class: inverse, center, middle
+
+# Merci !
+
+
+Contact : [sylvainlapoix@gmail.com](mailto:sylvainlapoix@gmail.com) ou via WhatsApp.

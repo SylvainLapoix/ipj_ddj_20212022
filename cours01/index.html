@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>IPJ - Datajournalisme</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sylvain Lapoix" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# IPJ - Datajournalisme
+## Cours 1 : R, votre nouvel outil
+### Sylvain Lapoix
+### 22/09/2021
+
+---
+
+
+
+background-image: url(https://media.giphy.com/media/fgLKQtTw54Hk8bRaXD/giphy.gif?cid=ecf05e479ouhmm8v3czlt64x4ux9ptpwg52i9hb80skq8w1e&amp;rid=giphy.gif&amp;ct=g)
+class: inverse, center, top
+
+
+# Qui êtes-vous ?
+
+
+---
+
+background-image: url(https://media.giphy.com/media/26gYERtrrzIEg6oKI/giphy.gif?cid=ecf05e47krqwfy8rpnyt36r42ujfb53dz787g1dc7uiytqx9&amp;rid=giphy.gif&amp;ct=g)
+class: inverse, center, top
+
+
+# Qu'est-ce que vous faîtes là ?
+
+---
+
+background-image: url(https://media.giphy.com/media/d1E1kn94NNfrlPGw/source.gif)
+class: inverse, center, top
+
+
+# Qu'est-ce que c'est que ce cours ?
+
+---
+
+background-image: url(https://media.giphy.com/media/C7olQswvzSwAE/giphy.gif?cid=ecf05e47luv2ef9pemwauxcrlwb6wbcrwyefgpedcosv95pp&amp;rid=giphy.gif&amp;ct=g)
+class: inverse, center, top
+
+
+# MAIS QUI SUIS-JE ?
+
+
+---
+
+background-image: url("https://media.giphy.com/media/xT1R9ScK8XbiRQv70Y/giphy.gif")
+class: center, top, inverse
+
+# 1. Déroulement du cours
+
+---
+
+## Objectifs
+
+**Ce cours a pour vocation de vous initier à l'usage journalistique d'outils de programmation statistique (en l'occurence R).**
+
+Il couvrira sous un angle programmatique tous les aspects de la démarche journalistique :
+1. la recherche de source ;
+2. le traitement des informations ;
+3. leur mise en forme.
+
+Nous utiliserons donc de l'informatique, de la statistique, de l'épistémologie, de la bibliographie ...
+
+--
+
+### Mais pour faire du **journalisme**.
+
+La donnée est un moyen et non une fin.
+
+
+
+
+
+---
+
+## Trousse à outil
+
+1. [R (base)](https://www.r-project.org/) : notre langage de référence ;
+2. [Rstudio](https://rstudio.com/) : notre interface de base ;
+3. [Sublime Text 3](https://www.sublimetext.com/) : notre éditeur de texte de référence et outil à tout faire.
+
+--
+
+Ces outils nécessitent l'usage courant de plusieurs langages ou syntaxes :
+* **R**, langage de programmation statistique orienté objet ;
+* **Markdown**, syntaxe de mise en forme de texte ;
+* les **regex** (ou *expression régulière*), langage formel de description des chaînes de charactère ;
+* **Xpath**, langage de requêtes utilisé pour traiter les formats HTML et XML.
+
+Chacun de ces outils sera présenté, documenté et utilisé de manière concrète pendant le cours. La théorie sera réduite au strict minimum nécessaire, nous sommes dans un cours pratique.
+
+---
+
+## Grands principes
+
+**Je vous encourage à vous tourner vers des solutions programmatiques et open source** pour le maximum de vos usages : la dépendance aux outils propriétaires (qu'ils soient payant ou gratuit) peut constituer une faiblesse voire un danger pour les journalistes (cf. [Google Fusion Tables](https://www.fastcompany.com/90279779/rip-fusion-tables-google-is-killing-off-the-beloved-data-visualization-tool) et autres plantages).
+
+Ce cours est la deuxième itération d'une tentative d'initier des apprenti·es journalistes à la programmation, il se construira avec vous : vos retours, vos suggestions, vos trouvailles, vos critiques ...
+
+--
+
+... donc, **posez des questions, le maximum, dès que vous en ressentez le besoin : vous ferez avancer tout le monde, moi y compris**.
+
+Des pertes de temps considérables sont évitées chaque jour par l'application de bonnes habitudes :
+* **documentez** vos idées, vos réussites, vos erreurs, vos blocages ...
+* **interrogez** vos collègues, vos outils, la communauté ...
+* **partagez** vos trouvailles, vos bonnes pratiques et votre code.
+
+---
+
+
+.center[
+## Pourquoi programmer ?
+]
+
+--
+
+.center[
+## Mais oui, après tout, pourquoi ?
+]
+
+
+--
+
+
+.center[
+# POURQUOI ?????????
+]
+
+--
+
+.footnote[Calmez-vous, vous me faîtes peur.]
+
+---
+
+## Programmer en tant que journaliste 1/2
+
+Maîtriser un ou plusieurs langage de programmation, même à un niveau peu avancé, présente de nombreux avantages pour un·e journaliste :
+
+**1. accès aux sources**
+Le traitement programmatique donne accès à des sources autrement inaccessibles : APIs, registres massifs, bases de données, scraping ...
+
+**2. capacité de traitement**
+Les outils en interface graphique (ou *GUI*) ont des limites fortes en volume et complexité de traitement que la programmation permet de lever.
+
+**3. production de formats originaux**
+La programmation ouvre une large palette de formats inacessibles autrement : graphs, interactivité, expérience personnalisée, temps réel, etc.
+
+**4. compréhension technique**
+La manipulation même de l'outil informatique constitue une porte d'entrée dans la réalité technique d'une des composantes centrales de notre société (et donc de sujets qui la traversent).
+
+**5. reproductibilité**
+Là où les outils en *GUI* nécessitent de reprendre à zéro toute manipulation de données, la programmation permet de reproduire, affiner et perfectionner ses travaux.
+
+
+---
+
+## Programmer en tant que journaliste 2/2
+
+**6. communication avec d'autres métiers**
+Les langages et logiques de programmation constituent la base de la pratique de nombreux métiers, que ce soit dans l'informatique, la recherche ou l'industrie. Partager cette syntaxe facilite la communication et l'échange d'information ou de bonnes pratiques : une bonne occasion de s'inspirer de ces métiers pour mieux faire le vôtre.
+
+**7. rigueur et logique**
+Les logiques sous-jacentes à l'informatique reposent sur un rapport à l'information très différent de celui habituellement mobilisé dans le journalisme. Au déclaratif, contextuel et émotionnel, l'informatique substitue des systèmes de classification catégorielle, une nécessité de structuration de la pensée qui complète ce mode.
+
+--
+
+En un mot, et selon mon humble avis, l'informatique peut faire de vous de meilleur·es journalistes.
+
+---
+
+background-image: url(https://media.giphy.com/media/1fkd6ZTBsxSosV4UTS/giphy.gif?cid=ecf05e47rwyr9u9nsigma4n281thgxv9hr34dkxgcd8pi26n&amp;rid=giphy.gif&amp;ct=g)
+class: inverse, center, top
+
+
+# Dîtes adieu aux boutons !
+
+---
+
+background-image: url("https://media.giphy.com/media/l4JyOCNEfXvVYEqB2/giphy.gif")
+class: center, top, inverse
+
+# 2. R, la base
+
+---
+
+## Pourquoi R ?
+
+R est un langage de programmation puissant, versatile et en perpétuelle amélioration conçu par et pour des usager·ères quotidien·nes de la donnée.
+
+Il bénéficie de plusieurs atouts clefs qui le rendent extrêmement pratique :
+* **une documentation détaillée et facile à trouver** ;
+* un large spectre **d'extension et de packages adaptés à tous les besoins** (cette présentation est, par exemple, intégralement réalisée en R) ;
+* **une forte interopérabilité avec nombres d'autres technologies et outils** (APIs, autres langages comme C, SQL, Javascript ou Python, etc.) ;
+* **une communauté étendue et accueillante** ;
+* et, cerise sur le gâteau, c'est **open source**.
+
+---
+
+background-image: url(https://media.giphy.com/media/Ae7SI3LoPYj8Q/giphy.gif)
+class: center, top
+## Avec R, vous ne serez jamais seul·e !
+
+---
+
+background-image: url(./img/google_colab_copyindrive.png)
+class: inverse, bottom
+background-size: contain
+
+## Copiez le Google Colab dans votre Drive et allons-y
+
+---
+class: inverse, center, middle
+
+# Merci !
+
+
+Contact : [sylvainlapoix@gmail.com](mailto:sylvainlapoix@gmail.com) ou via WhatsApp.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>IPJ - Datajournalisme</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sylvain Lapoix" />
+    <meta name="date" content="2021-03-11" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# IPJ - Datajournalisme
+## Cours 2 : base du traitement de données en R
+### Sylvain Lapoix
+### 03/11/2021
+
+---
+
+
+background-image: url(https://media.giphy.com/media/d1E1kn94NNfrlPGw/source.gif)
+class: inverse, center, top
+
+# RStudio
+
+---
+
+## Installation
+
+---
+
+## Première exploration
+
+.center[
+![](https://raw.githubusercontent.com/SylvainLapoix/ipj_ddj_20202021/master/cours01/img/rstudio_interface.png)
+]
+
+---
+
+# Commandes de bases
+
+---
+
+## La ligne de commande
+
+Toutes les commandes peuvent être exécuter dans l'interface **console** ou *ligne de commande*.
+
+Il suffit de taper le code R puis `Entrée` pour l'exécuter : le résultat de l'opération (ou l'erreur) apparaît immédiatement après.
+
+
+```r
+72.93*2.17+(41/5)
+```
+
+```
+## [1] 166.4581
+```
+
+.footnote[
+.red[**ATTENTION**] : les résultats ne sont qu'imprimés, c'est-à-dire affichés, ils ne sont pas gardés en mémoire. **Tout résultat non stocké d'une manière ou d'une autre est perdu**.
+]
+
+
+
+---
+
+## Les variables informatiques 1/2
+
+Les **variables informatiques** (pour les différencier des variables statistiques) sont des séries de signes auquel il est possible d'**assigner** une valeur.
+
+Dès lors qu'elle se voit assignée une valeur, une variable permettra *"d'appeler"* la valeur en recopiant son nom. La valeur en question peut être de toute nature :
+
+* donnée numérique ;
+* chaîne de caractère ;
+* structure de données ;
+* fonction, etc.
+
+
+```r
+effectif &lt;- 8
+effectif
+```
+
+```
+## [1] 8
+```
+
+
+---
+
+## Les variables informatiques 2/2
+
+L'ensemble des variables assignées s'affichent dans le volet `Environment` de RStudio (en haut à droite).
+
+Points importants :
+
+1. une variable peut être réassignée à tout moment ;
+2. une variable renvoie la dernière valeur qui lui a été assignée ;
+3. toutes les variables sont *"oubliées"* à chaque lancement de session : vous devez les réassigner pour réaliser les opérations.
+
+
+```r
+effectif &lt;- 9 # On peut "réassigner" la valeur d'une variable à volonté
+effectif - 1 # et en manipuler la valeur
+```
+
+```
+## [1] 8
+```
+
+---
+
+### Variables interdites
+
+Les noms de variables doivent obéir à certaines règles :
+
+.pull-left[
+
+* elles ne peuvent débuter par un chiffre ou une "_" (underscore) ;
+* elles peuvent contenir lettres, chiffres, "." et "_" ;
+* certains sont dits *"réservés"* (voir liste ci-contre, pour la consulter à tout moment, utilisez `?Reserved`)
+]
+
+.pull-right[**Variables réservées**
+
+* if else repeat while function for in next break ;
+* TRUE FALSE NULL Inf NaN NA NA_integer_ NA_real_ NA_complex_ NA_character_ ;
+* toute variable débutant par "...".
+]
+
+---
+
+## Structures de données 
+
+### Le vecteur (1/2)
+
+Les structures de données sont de objets qui permettent de stocker de manière organisées plusieurs valeurs. **La strucutre de référence de R est le vecteur** : une suite de valeur d'une seule dimension et du même type de données :
+
+```r
+prenoms &lt;- c("Marine","Marie","Manon","Léa","James")
+prenoms
+```
+
+```
+## [1] "Marine" "Marie"  "Manon"  "Léa"    "James"
+```
+
+**Toutes les structures de données de R peuvent être construites avec ou décompensées en vecteurs**.
+
+---
+
+### Le vecteur (2/2)
+
+Outre sa capacité à stocker, le vecteur permet aussi des opérations globales.
+
+Par exemple, si on réalise une opération arithmétique sur un vecteur contenant des valeurs numériques, l'opération sera appliquée à chaque valeur du vecteur :
+
+
+```r
+chiffres &lt;- c(1,2,3)
+chiffres * 3
+```
+
+```
+## [1] 3 6 9
+```
+
+--
+
+Cas réel : si vous souhaitez calculer la valeur TTC de montant hors taxe et que vous connaissez le taux, vous pouvez l'appliquer à une série de valeurs.
+
+
+```r
+ht &lt;- c(1000, 2150, 1080, 750)
+```
+
+
+--
+
+
+```r
+ht * 1.2
+```
+
+```
+## [1] 1200 2580 1296  900
+```
+
+---
+
+## Structures de données
+
+### Matrices
+Le format classique des maths : un type de données par structure.
+
+### Dataframes
+Le format "classique" des BDDs : un type de données par variable.
+
+A quoi s'ajoutent :
+* les lists ;
+* les facteurs ;
+* les tibbles (qui sont un autre nom des dataframes).
+
+---
+
+### Fabriquer une table
+
+Les structures de données peuvent être créées par plusieurs moyens. Le plus simple consiste à assembler des vecteurs en ligne ou en colonne.
+
+Pour cela, nous utiliserons les fonctions `rbind()` pour assembler en ligne et `cbind()` pour assembler en colonne.
+
+Prenons deux vecteurs :
+
+
+```r
+loups &lt;- c("canis lupus familiaris", "canis lupus italicus", "canis lupus arctos")
+meutes &lt;- c(8,10,20)
+```
+
+Nous pouvons les assembler en les mettant entre parenthèse après l'une des deux fonctions citée ci-dessus.
+
+Quel résultat obtenons-nous ?
+
+--
+
+
+```r
+cbind(loups, meutes)
+```
+
+```
+##      loups                    meutes
+## [1,] "canis lupus familiaris" "8"   
+## [2,] "canis lupus italicus"   "10"  
+## [3,] "canis lupus arctos"     "20"
+```
+
+```r
+rbind(loups, meutes)
+```
+
+```
+##        [,1]                     [,2]                   [,3]                
+## loups  "canis lupus familiaris" "canis lupus italicus" "canis lupus arctos"
+## meutes "8"                      "10"                   "20"
+```
+
+
+---
+
+### Coordonnées d'une valeur 1/2
+
+Toutes les structures de données (à l'exception des listes) offrent une **indexation numérique** des données, c'est-à-dire qu'elles permettent d'appeler une donnée en donnant une coordonnée chiffré (à un ou plusieurs chiffres).
+
+Un vecteur étant unidimensionnel, nous pourrons appeler n'importe quelle valeur avec le rang correspondant à son emplacement :
+
+```r
+loups &lt;- c("canis lupus familiaris", "canis lupus italicus", "canis lupus arctos")
+```
+
+Quel sera le résultat de `loups[2]` ?
+
+--
+
+```r
+loups[2]
+```
+
+```
+## [1] "canis lupus italicus"
+```
+
+Dans R, l'index débute à 1: le premier élément d'un vecteur est nomduvecteur[1], le 2è nomduvecteur[2], etc. Contrairement à certains langages ou il débute à 0.
+
+---
+
+### Coordonnées d'une valeur 1/2
+
+
+Dans des structures de données à plusieurs dimensions, il faudra fournir autant d'index que de dimensions :
+
+```r
+cbind(loups, meutes)[2,1]
+```
+
+```
+##                  loups 
+## "canis lupus italicus"
+```
+
+Nous apprendrons plus tard (au cours03) comment sélectionner des données ou des sous-ensembles suivant des conditions appliquées aux données.
+
+---
+
+## Fonctions
+
+Une **fonction** est une opération que vous pouvez "appeler" en spécifiant les conditions de son exécution.
+
+En pratique, une fonction est appelée en écrivant son nom suivi d'une parenthèse ouverte puis refermée. La plupart des fonctions nécessitent **des arguments**, c'est-à-dire des paramètres qui doivent être listés dans la parenthèse dans un certain ordre ou suivant une certaine nomenclature. Certains arguments sont obligatoires, d'autres facultatifs.
+
+Une fonction peut être utilisée dans la ligne de commande ou dans un script.
+
+--
+
+#### Premier exemple
+
+Quel résultat obtenez-vous en tapant `getwd()` dans votre console ?
+A quoi correspond-il ?
+
+---
+
+### Aparté : trouver de la documentation
+
+Rstudio intègre deux outils simples pour accéder rapidement à la documentation des fonctions :
+* l'onglet "Help" dans le panneau inférieur droit ;
+* les préfixes `?` et  `??` à ajouter avant une fonction dans la console.
+
+
+```r
+?getwd
+```
+
+--
+
+Vous pouvez également chercher sur Google mais Rstudio embarque déjà une très grande quantité de données.
+
+---
+
+### Autres exemples de fonctions
+
+Fonctions exploratoires de base
+* summary()
+* typeof()
+* class()
+* lengh()
+* names()
+* trier avec order()
+
+Trucs utiles :
+* sample()
+
+
+---
+
+# Etendre ses capacités avec des packages
+
+---
+
+## Installer un package
+
+
+```r
+install.packages("tidyverse") # installe l'intégralité du tidyverse
+```
+
+
+**Un package "en développement"**
+
+
+```r
+devtools::install_github("hadley/devtools")
+```
+
+
+## Charger un package
+
+
+```r
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+```
+
+```
+## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.5     ✓ dplyr   1.0.7
+## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
+## ✓ readr   2.0.2     ✓ forcats 0.5.1
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+
+---
+
+## Le `{Tidyverse}`
+
+.pull-left[
+
+Comme son nom l'indique, il s'agit d'un ensemble de package autour de la notion de "tidy data" :
+  * **readr** : pour lire des fichiers ;
+  * **tibble** : pour organiser les données dans une structure performante, le *tibble* ;
+  * **tidyr** : pour réorganiser les données ;
+  * **dplyr** : pour manipuler les données ;
+  * **ggplot2** : pour visualiser les données ;
+  * **purrr** : pour la programmation fonctionnelle (utilisation avancée) ;
+]
+
+.pull-right[**Tidy data**
+
+.center[
+![](https://raw.githubusercontent.com/SylvainLapoix/ipj_ddj_20202021/master/cours01/img/tidydata.png)
+]
+
+]
+
+---
+
+### Les autres packages utilisés dans ce cours
+
+* [rvest](https://github.com/tidyverse/rvest) : pour scraper des données sur le web ;
+* [data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) : une variante du Tidyverse, dont je vous conseille surtout la fonction `fread()` pour lire les gros fichiers ;
+* [devtools](https://github.com/r-lib/devtools) : pour installer certains packages non intégré aux serveurs Cran.
+
+---
+
+### Entretenir sa liste de package
+
+Vous pouvez gérer vos packages via l'interface graphique (dans "Tools") ou via la console (comme d'habitude quoi !). Si vous choisissez cette 2de option, quelques fonctions vous suffiront à couvrir presque tous vos besoins :
+
+* `installed.packages()` : permet de voir la liste de vos packages ou vérifier si vous disposez d'un package donnée
+* `update.packages()` : pour de les mettre à jour.
+* `remove.packages()` : pour supprimer un package donné.
+
+
+---
+
+### Se faire une liste de course
+
+Quand je débute un travail de traitement de données, j'ai pour habitude d'aller voir les packages qui pourraient contenir des fonctions utiles au sujet spécifique qui est le mien.
+
+**Par exemple**
+j'ai récemment travaillé sur les horaires de bibliothèque. Sur ce sujet précis, j'ai identifié des problématiques et types de données puis j'ai cherché les packages ad hoc.
+
+Dans ce cas :
+* *traitement de date et données horaires* =&gt; `lubridate` ;
+* *traitement de chaînes de caractère (avec corrections, etc.)* : `stringr` ;
+* *réalisation de cartes légères* : `sf`, `tmap` et `tmaptools`.
+
+Il existe des packages pour toutes les spécialités et tous les sujets.
+
+---
+
+## Utiliser un script
+
+.pull-left[
+Le **script** est un fichier qui regroupe une série de commandes à exécuter dans un certain ordre : c'est une sorte de *fiche d'instruction*.
+
+Dans **Rstudio**, vous pouvez créer un nouveau script `R` avec le raccourci `Cmd+Shift+n`. Il s'ouvre alors dans le panneau supérieur gauche.
+]
+
+.pull-right[
+![](https://raw.githubusercontent.com/SylvainLapoix/ipj_ddj_20202021/master/cours01/img/exemple_script.png)
+]
+
+---
+
+### Intérêt du script
+
+Le script se présente comme une *chaîne de commande* : il vise à conserver une liste d'opérations à exécuter dans un ordre spécifique.
+
+A cet égard, le script comporte des avantages évidents :
+* archivage ;
+* reproductibilité des opérations ;
+* organisation du travail ;
+* historicisation des commandes ;
+* communicabilité des opérations.
+
+Un script peut connaître plusieurs versions, être collaboratif, corrigé, repris et enfin publié. **Le script est l'équivalent informatique de la copie pour le journalisme.**
+
+---
+
+
+.pull-left[
+### Créer un script
+
+Vous pouvez créer un script :
+* via le menu *File -&gt; New File -&gt; R Script* ;
+* avec le raccourci *Ctrl + Shift + n* / *Cmd + Shift + n*.
+
+Un fichier texte vierge apparaîtra alors dans le panneau supérieur gauche, nommé *"Untitled1"*. Vous pourrez commencer à y écrire (*à l'éditer*) immédiatement dans n'importe quel éditeur de texte.
+
+Dès que vous y avez ajouté quelque chose, **sauvegardez-le** :
+* *Ctrl + s* / *Cmd + s* ;
+* choisissez le dossier de destination (voir la partie *Organiser vos fichiers*) ;
+* nommez-le de manière explicite sans oublier l'extension .R.
+]
+
+.pull-right[
+### Utiliser un script
+
+Vous pouvez utiliser l'interface Rstudio pour lire, éditer et exécuter votre script ligne par ligne ou par portion entière.
+
+Pour exécuter la ou les commandes placées sur une ligne, il vous suffit de vous mettre sur la ligne désiré et d'utiliser le raccourci *Ctrl + Enter / Cmd + Enter*. Le contenu de la ligne apparaît alors dans votre console puis le résultat et / ou les messages associés (warning, erreurs, etc. Nous en reparlerons plus tard)...
+
+Vous pouvez exécuter plusieurs lignes en les sélectionner avec votre curseur. Le raccourci exécutera alors toutes les lignes en surbrillance.
+]
+
+---
+
+.pull-left[#### Les commentaires
+
+Un commentaire (ou *"com"*) écartée explicitement des autres commandes pour ne pas être exécutée (*"évaluée"*). Dans R (comme dans Python et Javascript), on *"commente"* une ligne en la faisant débuter par un *"#"*.
+
+Vous pouvez également utilser le raccourci Rstudio *Ctrl + Shift + c / Cmd + Shift + c* pour commenter ou *décommenter"* plusieurs lignes sélectionner d'un coup :
+
+
+```r
+# install.packages("tidyverse")
+# la ligne précédente ne s'exécutera pas car elle est commentée
+
+update.packages("tidyverse") # celle-ci s'éxecuter jusqu'au #
+```
+]
+
+.pull-left[#### Les parties
+
+Vous pouvez également utiliser la fonctionnalité *"Sections"* de Rstudio pour structurer votre script en parties.
+
+Cette fonction vous permet de créer des séparations dans votre script en insérant des titres précédés de *"##"* et suivi d'au moins *"---"*. Dès lors, vous pouvez "replier" une partie du script pour le cacher ou naviguer d'une partie à l'autre via le menu en bas à gauche du panneau Script :
+
+
+```r
+## Partie 1 - libs ------
+
+library(tidyverse)
+
+## Partie 2 - nettoyage ------
+
+var &lt;- read_csv("./data/file.csv")
+```
+]
+
+
+---
+
+
+background-image: url(https://media.giphy.com/media/Yoc0rIoWyjenXHyG4s/giphy.gif)
+class: inverse, center, top
+
+# Débuter l'exploration
+
+---
+
+## Créer un projet
+
+![](./img/project_creation.png)
+
+---
+
+
+### Aparté : le Rmd, un script qui se lit
+
+#### Côté R
+
+La principale fonctionnalité R est l'intégration de *chunks*, des *"morceaux"*, de code R à l'intérieur d'un Markdown. Le Rmd affiche la sortie des opérations.
+
+Pour ajouter un chunk, vous pouvez utiliser le raccourci *Ctrl/Cmd + Alt + i*.
+
+Certaines fonctions sont spécialement conçues pour les Rmd, comme `kable()` du package `{knitr}`, qui permet un affichage optimal des tables. 
+
+Il est également possible d'afficher les sorties visuelles :
+* dataviz ;
+* cartes interactives ;
+* tableaux interactifs ;
+* apps ;
+* etc.
+
+
+---
+
+## `{readr}` - pour lire
+
+---
+
+### read_csv()
+
+La fonction `read_csv()` permet de lire des données stockées en CSV sous forme de `tibble` (il s'agit en fait d'un cas particlier de `read_delim()`, comme `read_tsv()`).
+
+Cette fonction n'a qu'un seul argument obligatoire : la source des données. Cette source peut être :
+* l'emplacement d'un fichier sur le disque (il s'agira alors d'un path, voire slide suivante) ;
+* l'emplacement d'un fichier sur un serveur (il s'agira alors d'une URL) ;
+* une chaîne de caractère dont les données sont séparées par des virgules (comme dans notre exemple).
+
+Par exemple, vous pouvez charger un CSV publié sur data.gouv.fr (ici [les données hospitalières relatives aux nouveaux cas de Covid](    https://www.data.gouv.fr/fr/datasets/r/6fadff46-9efd-4c53-942a-54aca783c30c) par le Ministère de la Santé) :
+
+
+```r
+read_csv("https://www.data.gouv.fr/fr/datasets/r/381a9472-ce83-407d-9a64-1b8c23af83df")
+```
+
+```
+## Rows: 602 Columns: 5
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## dbl  (4): tx_incid, R, taux_occupation_sae, tx_pos
+## date (1): extract_date
+```
+
+```
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```
+## # A tibble: 602 × 5
+##    extract_date tx_incid     R taux_occupation_sae tx_pos
+##    &lt;date&gt;          &lt;dbl&gt; &lt;dbl&gt;               &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-03-18      NA       NA                15.2     NA
+##  2 2020-03-19       5.57    NA                19.8     NA
+##  3 2020-03-20       8.40    NA                25.6     NA
+##  4 2020-03-21      11.0     NA                28.7     NA
+##  5 2020-03-22      13.6     NA                33.1     NA
+##  6 2020-03-23      18.3     NA                41.1     NA
+##  7 2020-03-24      23.9     NA                49.5     NA
+##  8 2020-03-25      30.1     NA                58       NA
+##  9 2020-03-26      32.9     NA                66.3     NA
+## 10 2020-03-27      36.9     NA                74.3     NA
+## # … with 592 more rows
+```
+
+---
+
+### Aparté : le "path"
+
+Le *path* ou *chemin de fichier* est une chaîne de caractère qui décrit l'emplacement d'un fichier dans un système de fichier, qu'il s'agisse de votre machine ou d'un serveur distant. Il existe deux manières de l'écrire :
+
+Le **chemin absolu** chemin unique et permanent qui donne l'emplacement d'un fichier sur le disque d'où qu'on se trouve. Il part de **la racine**, c'est-à-dire de le dossier contenant tous les autres sur votre système.
+
+Par exemple :
+`"home/user/directory/subdir/file.csv"`
+
+Le **chemin relatif** est un chemin particulier qui dépend de l'endroit *"où l'on se trouve"* sur le disque. Il part de l'emplacement, que l'on nomme le plus souvent **working directory** (pour l'obtenir, vous pouvez entrer `getwd()` dans la console).
+
+En reprenant l'exemple précédent, si nous sommes dans le dossier *directory*, le chemin relatif du fichier *file.csv* sera :
+`"./subdir/file.csv"`.
+
+En maintenant une bonne organisation de vos fichiers, vous pourrez appeler vos fichiers via des chemins relatifs et ainsi améliorer la réutilisabilité et la reproductibilité de vos scripts. **C'est la méthode que nous emploierons systématiquement dans ce cours.**
+
+
+---
+
+#### La sortie de read_csv()
+
+Pour plus de sécurité, il est souvent préférable de télécharger localement un fichier. Téléchargez le fichier des indicateurs et placez-le dans le dossier *data* de votre projet ou du dossier consacré à ce cours. Puis, chargez-le.
+
+Que pouvons-nous dire de ce qui s'affiche dans la console ?
+
+
+```r
+read_csv("./data/donnees-hospitalieres-nouveaux-covid19-2021-11-02-19h09.csv")
+```
+
+```
+## Rows: 60588 Columns: 1
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (1): dep;jour;incid_hosp;incid_rea;incid_dc;incid_rad
+```
+
+```
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```
+## # A tibble: 60,588 × 1
+##    `dep;jour;incid_hosp;incid_rea;incid_dc;incid_rad`
+##    &lt;chr&gt;                                             
+##  1 01;2020-03-19;1;0;0;0                             
+##  2 01;2020-03-20;0;0;0;1                             
+##  3 01;2020-03-21;3;0;0;0                             
+##  4 01;2020-03-22;3;1;0;1                             
+##  5 01;2020-03-23;14;1;0;5                            
+##  6 01;2020-03-24;11;1;0;4                            
+##  7 01;2020-03-25;13;2;0;5                            
+##  8 01;2020-03-26;14;3;2;2                            
+##  9 01;2020-03-27;14;2;0;0                            
+## 10 01;2020-03-28;7;3;1;3                             
+## # … with 60,578 more rows
+```
+
+---
+
+#### Arguments utiles
+
+Les fonctions `read_\*` proposent de nombreux arguments pour faciliter la lecture. Voici une sélection des plus utiles :
+* **skip** : permet de "sauter" n lignes (n étant un intéger) ;
+* **col_names** : si TRUE (par défault) considère que la première ligne contient le nom des variables, si FALSE considère qu'il ne contient pas le nom des variables, si un vecteur est fourni, considère que ce vecteur contient le nom à donner aux variables ;
+* **col_types** : si une suite de lettre correspondant aux types de données est fourni, permet de détemriner manuellement le type de données pour chaque variable, voire la liste dans l'aide (par défaut le type est imputé sur la base des 1000 premières lignes) ;
+* **na** : permet de lister dans un vecteur les valeurs à lire comme *"valeurs manquantes"* (`#N/A`) ;
+* **delim** : pour la fonction `read_delim()` permet d'indiquer par une chaîne de caractère le séparateur des données.
+
+---
+
+#### Le "locale"
+
+Un paramètre particulier à maîtriser est **locale**: il indique à la fonction quels réglages par défaut doivent être pris en compte pour les conventions variables d'un pays à l'autre. En pratique : format des dates et heures, marqueurs des décimales et milliers, fuseau horaire et surtout encodage des caractères.
+
+C'est ce dernier point qui risque de vous poser le plus de problème : R étant un langage anglosaxon et américano-centré, ses réglages par défaut auront tendance à mal lire les caractères (dits) spéciaux. A commencer par les lettres accentuées.
+
+---
+
+### Renommer ses variables
+
+.pull-left[Les galères habituelles sur lesquelles vous tomberez :
+* nomenclatures administratives illisibles ;
+* noms interminables ;
+* accents dans tous les sens ;
+* pire, des espaces ...
+]
+
+.pull-right[Mes conseils pour renommer vos variables :
+1. des termes clairs (en français ou en anglais) ;
+2. des noms courts ;
+3. aucun accent ;
+4. des "_" pour séparer.
+]
+
+Vous pouvez renommer soit en chargeant (avec **col_names**), soit variables par variables, soit avec la fonction `setNames()`. Je vous recommande la première ou troisième option et, surtout, **je vous conseille de renommer à l'aide d'un vecteur** : cela facilitera le traçage des noms de variable.
+
+---
+
+#### Aparté : le `%&gt;%`
+
+.center[![](https://github.com/tidyverse/magrittr/raw/master/man/figures/logo.png)]
+
+Le `pipe` est un outil de traitement de données introduit via le package `{magrittr}` et qui permet de passer la sortie d'une fonction en premier argument de la suivante.
+
+Il est accessible sous Rstudio par le raccourci *Ctrl / Cmd + Shift + m*.
+
+Cet outil extrêmement pratique permet de *chaîner* des opérations et d'éviter ainsi d'emboîter les fonctions ou (pire) de multiplier les variables à chaque manipulation. Nous développerons plus longuement les intérêts du pipe et la façon de l'utiliser dans les cours03 #suspense.
+
+---
+
+## Examiner ses données
+
+La première étape du nettoyage consiste à examiner ses données afin d'en connaître les traits généraux : combien de variables ? Combien de valeur par variable ? Quelle est leur distribution ? Quel rapport entretiennent-elles entre elles ? Y a-t-il des valeurs non renseignées ? Etc.
+
+`{R base}` et le `{tidyverse}` offrent de nombreux outils d'exploration préalables qui permettent de créer des aperçus des données.
+
+---
+
+### Quelques fonctions utiles
+
+* `head()` : propose en sortie les 6 premières observations d'un jeu de données ;
+* `tail()` : les six dernières ;
+* `glimpse()` (dans le `{Tidyverse}`) : synthèse rapide (nombre de ligne, nombre de colonne et premières valeurs pour chacune des variables à disposition ainsi que son type) ;
+* `summary()` : une synthèse des variables ;
+* `table()` : la distribution sur une valeurs ;
+* `is.na()` : la présence de NAs ;
+* `length()` : pour la longueur d'un vecteur ;
+* `nrow()` / `ncol()` : pour le nombre de ligne ou colonne d'un dataframe ;
+* `nchar()` : pour le nombre de caractères d'une chaîne de caractère.
+
+---
+
+background-image: url(https://media.giphy.com/media/cj8RM98n6gy20EjTc9/giphy.gif)
+class: inverse, center, top
+
+## A vous !
+
+**utilisez les quelques fonctions proposées précédemment sur le fichier de Santé Publique France et regardez les hypothèses que vous pouvez en tirer sur son contenu**
+
+
+
+---
+
+### `{dplyr}` &amp; `{tidyr}` - pour manipuler
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Merci !
+
+
+Contact : [sylvainlapoix@gmail.com](mailto:sylvainlapoix@gmail.com) ou via WhatsApp.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
